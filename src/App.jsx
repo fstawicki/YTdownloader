@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from "axios";
-import Spinner from 'react-bootstrap/Spinner';
+// import Spinner from 'react-bootstrap/Spinner';
 
 import { BsYoutube } from "react-icons/bs";
 
@@ -10,7 +10,6 @@ import './App.css';
 function App() {
 
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
 
   const [linkMP3, setLinkMP3] = useState('');
@@ -52,6 +51,9 @@ function App() {
       setVideoDuration(data.duration);
       setVideoImage(data.thumbnail);
 
+      /*
+      Unfortunatelly, API provides different entries with different videos (for example in one video mp3 format can be accessed by data.medias[0].url, while in another one by data.medias[5].url), so I couldn't apply one solution for each video quality and need to come up with some resolution, thus why I created this if statements.
+      */
       data.medias.forEach(element => {
         if(element.extension === 'mp3' && element.quality === '128kbps'){
           setLinkMP3(element.url);
@@ -117,7 +119,6 @@ function App() {
           <input type="text" value={input} onChange={getInput} />
           <button className='convertBtn' onClick={convertLink}>Convert</button>
         </div>
-        {isLoading && <Spinner animation="border" variant="danger" />}
         {show && (
         <>
         <p className='info'>{videoName}</p>

@@ -31,6 +31,9 @@ html{
 
 h1{
   font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 h1,
@@ -86,7 +89,7 @@ button:hover{
 .info{
   text-align: center;
   font-size: 1.3rem;
-  color: rgb(133, 4, 4);
+  color: red;
   margin-bottom: 0.5rem;
 }
 
@@ -123,6 +126,11 @@ select{
   width: 500px;
   height: 280px;
   margin-bottom: 1rem;
+}
+
+.icon{
+  color: red;
+  margin: 0 0.5rem;
 }
 
 

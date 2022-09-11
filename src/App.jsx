@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import axios from "axios";
+import Spinner from 'react-bootstrap/Spinner';
+
+import { BsYoutube } from "react-icons/bs";
+
 
 import './App.css';
 
 function App() {
 
   const [input, setInput] = useState('');
-  const [show, setShow] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [show, setShow] = useState(false);
 
   const [linkMP3, setLinkMP3] = useState('');
   const [link144p, setLink144p] = useState('');
@@ -40,6 +45,7 @@ function App() {
     };
     
     axios.request(options).then(function (response) {
+      setShow(true);
       const data = response.data;
       console.log(data);
       setVideoName(data.title);
@@ -70,11 +76,11 @@ function App() {
         }
       });
 
-
     }).catch(function (error) {
       console.error(error);
       alert('Something went wrong');
     });
+
   }
 
   const getQuality = (e) => {
@@ -105,12 +111,13 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <h1>YT Downloader</h1>
+        <h1>YT <BsYoutube className='icon' /> Downloader</h1>
         <p className='instruction'>Enter Youtube link below and click convert</p>
         <div className="searchbar">
           <input type="text" value={input} onChange={getInput} />
           <button className='convertBtn' onClick={convertLink}>Convert</button>
         </div>
+        {isLoading && <Spinner animation="border" variant="danger" />}
         {show && (
         <>
         <p className='info'>{videoName}</p>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import axios from "axios";
 // import Spinner from 'react-bootstrap/Spinner';
 
@@ -26,6 +26,10 @@ function App() {
 
   const getInput = (e) => {
     setInput(e.target.value);
+  }
+
+  const clearInput = () => {
+    setInput('');
   }
 
   const convertLink = () => {
@@ -115,27 +119,27 @@ function App() {
         <h1>YT <BsYoutube className='icon' /> Downloader</h1>
         <p className='instruction'>Enter Youtube link below and click convert</p>
         <div className="searchbar">
-          <input type="text" value={input} onChange={getInput} />
+          <input type="text" value={input} onChange={getInput} onClick={clearInput} />
           <button className='convertBtn' onClick={convertLink}>Convert</button>
         </div>
         {show && (
-        <>
+        <Fragment>
         <p className='info'>{videoName}</p>
         <p className='info'>Duration: {videoDuration}</p>
         <img className='image' src={videoImage} alt="yt thumbnail" />
         <div className="downloadContainer">
           <a href={linkMP3} className='downloadBtn'>Download MP3</a>
           <select name="quality" defaultValue="144p" onChange={getQuality}>
-            <option value="144p">144p</option>
-            <option value="240p">240p</option>
-            <option value="360p">360p</option>
-            <option value="480p">480p</option>
-            <option value="720p60">720p</option>
-            <option value="1080p60">1080p</option>
+            {link144p && <option value="144p">144p</option>}
+            {link240p && <option value="240p">240p</option>}
+            {link360p && <option value="360p">360p</option>}
+            {link480p && <option value="480p">480p</option>}
+            {link720p && <option value="720p">720p</option>}
+            {link1080p && <option value="1080p">1080p</option>}
           </select>
           <a href={link} className='downloadBtn'>Download MP4</a>
         </div>
-        </>
+        </Fragment>
         )}
       </div>
     </div>

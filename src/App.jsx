@@ -1,6 +1,5 @@
 import { useState, Fragment } from 'react';
 import axios from "axios";
-// import Spinner from 'react-bootstrap/Spinner';
 
 import { BsYoutube } from "react-icons/bs";
 
@@ -10,6 +9,7 @@ function App() {
 
   const [input, setInput] = useState('');
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [linkMP3, setLinkMP3] = useState('');
   const [link144p, setLink144p] = useState('');
@@ -32,7 +32,7 @@ function App() {
     setInput('');
   }
 
-  const convertLink = () => {
+  const convertLink = async () => {
     const options = {
       method: 'GET',
       url: 'https://yt-downloader1.p.rapidapi.com/api',
@@ -41,14 +41,19 @@ function App() {
         key: '5145f7563cd789876e861e2dba4d15763501c84256ae3ac182116233173acaf0'
       },
       headers: {
-        'X-RapidAPI-Key': '0e080c7fe2mshbaae96571089130p16a7bbjsn016819b32a15',
+        'X-RapidAPI-Key': '07a19c7e9dmsh50130fa6b3ddc06p1d5f81jsn1a5672834a7a',
         'X-RapidAPI-Host': 'yt-downloader1.p.rapidapi.com'
       }
     };
-    
-    axios.request(options).then(function (response) {
-      setShow(true);
+
+    setLoading(true);
+
+    try{
+      const response = await axios(options);
       const data = response.data;
+
+      setLoading(false);
+      setShow(true);
       console.log(data);
       setVideoName(data.title);
       setVideoDuration(data.duration);
@@ -76,16 +81,22 @@ function App() {
         if(element.extension === 'mp4' && element.quality === '720p'){
           setLink720p(element.url);
         }
+        if(element.extension === 'mp4' && element.quality === '720p60'){
+          setLink720p(element.url);
+        }
         if(element.extension === 'mp4' && element.quality === '1080p'){
+          setLink1080p(element.url);
+        }
+        if(element.extension === 'mp4' && element.quality === '1080p60'){
           setLink1080p(element.url);
         }
       });
 
-    }).catch(function (error) {
-      console.error(error);
-      alert('Something went wrong');
-    });
-
+    }catch(error) {
+      console.log('error: ', error);
+      alert('Something went wrong, please try again.');
+    }
+  
   }
 
   const getQuality = (e) => {
@@ -122,13 +133,14 @@ function App() {
           <input type="text" value={input} onChange={getInput} onClick={clearInput} />
           <button className='convertBtn' onClick={convertLink}>Convert</button>
         </div>
+        {loading && <p className='loading'>Loading...</p>}
         {show && (
         <Fragment>
         <p className='info'>{videoName}</p>
         <p className='info'>Duration: {videoDuration}</p>
         <img className='image' src={videoImage} alt="yt thumbnail" />
         <div className="downloadContainer">
-          <a href={linkMP3} className='downloadBtn'>Download MP3</a>
+          <a download href={linkMP3} className='downloadBtn'>Download MP3</a>
           <select name="quality" defaultValue="144p" onChange={getQuality}>
             {link144p && <option value="144p">144p</option>}
             {link240p && <option value="240p">240p</option>}
@@ -137,7 +149,7 @@ function App() {
             {link720p && <option value="720p">720p</option>}
             {link1080p && <option value="1080p">1080p</option>}
           </select>
-          <a href={link} className='downloadBtn'>Download MP4</a>
+          <a download href={link} className='downloadBtn'>Download MP4</a>
         </div>
         </Fragment>
         )}

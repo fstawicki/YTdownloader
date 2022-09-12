@@ -4,7 +4,6 @@ import axios from "axios";
 
 import { BsYoutube } from "react-icons/bs";
 
-
 import './App.css';
 
 function App() {
@@ -131,8 +130,8 @@ function App() {
             <option value="240p">240p</option>
             <option value="360p">360p</option>
             <option value="480p">480p</option>
-            <option value="720p60">720p60</option>
-            <option value="1080p60">1080p60</option>
+            <option value="720p60">720p</option>
+            <option value="1080p60">1080p</option>
           </select>
           <a href={link} className='downloadBtn'>Download MP4</a>
         </div>
